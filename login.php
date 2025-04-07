@@ -45,16 +45,22 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if ($pass == $obj->pass)
     { 
       //connor: strenghtened cookie creation
-      echo "Logged in with secure cookie";
-      //setcookie('user', $user, [
-         // 'expires' => time() + 3600, // 1 hour
-         // 'path' => '/',
-         // 'secure' => false,          // Change to true if using HTTPS
-          //'httponly' => true,         // Prevent JavaScript access
-         // 'samesite' => 'Strict'      // Prevent CSRF
-       // ]);
-	//$hashed_user = password_hash($user, PASSWORD_DEFAULT);
-	setcookie('user', $user);
+      echo "Logged in with secure cookie\n\n";
+      $hashed_cookie = password_hash($pass, PASSWORD_BCRYPT);
+      setcookie('login-token', $hashed_cookie, [
+      	'expires' => time() + 600,
+	'path' => '/',
+	'secure' => false,
+	'httponly' => true,
+	'samesite' => 'Strict'
+      ]);
+      setcookie('user', $user, [
+         'expires' => time() + 600, // 10 minutes
+         'path' => '/',
+         'secure' => false,          // Change to true if using HTTPS
+         'httponly' => true,         // Prevent JavaScript access
+         'samesite' => 'Strict'      // Prevent CSRF
+       ]);
     }
     else
     {
@@ -88,7 +94,7 @@ function test_input($data) {
 </form>
 
 <?php
-echo "<h2>Your Input:</h2>";
+echo "\n\n<h2>Your Input:</h2>";
 echo $user;
 echo "<br>";
 echo $pass;

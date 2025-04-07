@@ -81,10 +81,25 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     {
         $balance += $amount;
     }
+    if ($action == "close") {
+    	$stmtClose = $mysqli->prepare("delete from users where name = ?");
+	$stmtClose->bind_param("s", $user);
+	if (!$stmtClose->execute()) {
+	     echo "Error: " . $stmtClose->error;
+	}
+	$stmtClose->close();
+
+	setcookie('user', '', time() - 3600);
+	unset($_COOKIE['user']);
+	echo "Account closed";
+	$mysqli->close();
+	exit();
+    }
     echo "Balance=" . $balance;
     $stmt = "update users set balance=" . $balance . " where name='" . $user . "'";
     $mysqli -> query($stmt);
     $mysqli -> close();
+  	
    }
 }
     

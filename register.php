@@ -63,8 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 		$mysqli -> close();
 	}
 	else{
-		Echo "User exists";
-	 }
+		echo "User exists";
+	}
   }
 }
 
